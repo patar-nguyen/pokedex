@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func createTrainerVC() -> UINavigationController {
         let trainerVC = TrainerVC()
-        trainerVC.title = "Pokemon Trainer"
+        trainerVC.title = "Name"
         return UINavigationController(rootViewController: trainerVC)
     }
 

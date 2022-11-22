@@ -47,9 +47,8 @@ class TrainerVC: UIViewController {
         }
         view.endEditing(true)
         
-        let pokedexVC = PokedexVC()
-        pokedexVC.trainerName = textField.text
-        pokedexVC.title = textField.text
+        let pokedexVC = PokedexVC(trainerName: textField.text!)
+
         navigationController?.pushViewController(pokedexVC, animated: true)
 
     }
