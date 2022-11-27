@@ -7,3 +7,15 @@
 
 import Foundation
 
+struct PokemonInfo: Codable {
+    var name: String
+    //var image: PokemonImage
+    var id: Int
+    var base_experience: Int
+    var height: Int
+    var weight: Int
+}
+
+//struct PokemonImage: Codable {
+//    var front_default: String
+//}

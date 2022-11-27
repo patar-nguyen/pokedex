@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct PokemonResults: Codable {
     var results: [PokemonEntry]
 }

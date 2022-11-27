@@ -89,7 +89,6 @@ class TrainerVC: UIViewController {
             button.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
-    
 }
 
 extension TrainerVC: UITextFieldDelegate {

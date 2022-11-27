@@ -10,7 +10,7 @@ import UIKit
 class PokedexVC: UIViewController {
 
     var tableView = UITableView()
-    var pokemonList: [PokemonEntry] = []
+    var pokemon: [PokemonEntry] = []
     
     var trainerName: String
     
@@ -51,40 +51,38 @@ class PokedexVC: UIViewController {
     }
     
     func getPokemon() {
-        NetworkManager.shared.getPokemon() {[weak self] result in
+        NetworkManager.shared.getPokemon() { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let pokemon):
-                self.pokemonList = pokemon
+                self.pokemon = pokemon
             case .failure(let error):
                 print(error.rawValue)
             }
         }
     }
-    
-//    func getSprites() {
-//        NetworkManager.shared.getSprites(url: "https://pokeapi.co/api/v2/pokemon/1/") {[weak self] result in
-//            guard let self = self else { return }
-//            switch result {
-//            case .success(let sprite):
-//                print(sprite)
-//            case .failure(let error):
-//                print(error.rawValue)
-//            }
-//        }
-//    }
+
 }
 
 extension PokedexVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        pokemonList.count
+        pokemon.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PokemonCell.reuseID) as! PokemonCell
-        let pokemon = pokemonList[indexPath.row]
+        let pokemon = pokemon[indexPath.row]
         cell.set(pokemon: pokemon)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let destination = PokemonInfoVC()
+        let name = pokemon[indexPath.row].name
+        destination.name = name
+        let url = pokemon[indexPath.row].url
+        destination.url = url
+        present(destination, animated: true)
     }
     
     

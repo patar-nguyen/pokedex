@@ -8,7 +8,7 @@
 import UIKit
 
 class Image: UIImageView {
-    let cache = NetworkManager.shared.cache
+    //let cache = NetworkManager.shared.cache
     let placeholder = UIImage(named: "placeholder")
     
     override init(frame: CGRect) {
@@ -27,12 +27,22 @@ class Image: UIImageView {
         translatesAutoresizingMaskIntoConstraints = false
     }
     
+   // move to different file - poke api
     func setSprite(from url: String) {
-        NetworkManager.shared.getSprites(url: url) { [weak self] result in
-            guard let self = self else { return }
+        NetworkManager.shared.getSprites(url: url) { result in
             switch result {
             case .success(let sprite):
-                print(sprite.front_default)
+                NetworkManager.shared.loadImage(url: sprite.front_default) { [weak self] result in
+                    switch result {
+                    case .success(let image):
+                        //ui related has to be on main thread
+                        DispatchQueue.main.async { [weak self] in
+                            self?.image = image
+                        }
+                    case .failure(let error):
+                        print(error.rawValue)
+                    }
+                }
             case .failure(let error):
                 print(error.rawValue)
             }

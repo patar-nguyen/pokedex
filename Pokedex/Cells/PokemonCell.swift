@@ -24,7 +24,7 @@ class PokemonCell: UITableViewCell {
     }
     
     func set(pokemon: PokemonEntry) {
-        //avatarImage.setSprite(from: pokemon.url)
+        avatarImage.setSprite(from: pokemon.url)
         nameLabel.text = pokemon.name
     }
     
