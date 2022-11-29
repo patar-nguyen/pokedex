@@ -14,40 +14,6 @@ class NetworkManager {
         
     private let baseURL = "https://pokeapi.co/api/v2/pokemon/"
     private let url = "https://pokeapi.co/api/v2/pokemon?limit=151"
-//    private let url = "https://pokedex-bb36f.firebaseio.com/pokemon.json"
-    
-//    func getPokemon(completion: @escaping (Result<[PokemonInfo], Errors>) -> Void) {
-//        guard let url = URL(string: url) else {
-//            completion(.failure(.invalidURL))
-//            return
-//        }
-//
-//        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-//            if let _ = error {
-//                completion(.failure(.unableToComplete))
-//                return
-//            }
-//
-//            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-//                completion(.failure(.invalidResponse))
-//                return
-//            }
-//
-//            guard let data = data?.parseData(string: "null") else {
-//                completion(.failure(.invalidData))
-//                return
-//            }
-//
-//            do {
-//                let pokemonResults = try self.decoder.decode([PokemonInfo].self, from: data)
-//                print(pokemonResults)
-//                completion(.success(pokemonResults))
-//            } catch {
-//                completion(.failure(.invalidData))
-//            }
-//        }
-//        task.resume()
-//    }
 
     func getPokemon(completion: @escaping (Result<[PokemonEntry], Errors>) -> Void) {
         guard let url = URL(string: url) else {

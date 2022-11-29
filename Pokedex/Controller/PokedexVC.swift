@@ -13,6 +13,7 @@ class PokedexVC: UIViewController {
     var pokemon: [PokemonEntry] = []
     var filteredPokemon: [PokemonEntry] = []
     var trainerName: String
+    var isSearching = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,9 +43,8 @@ class PokedexVC: UIViewController {
         let searchController = UISearchController()
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search for a username"
+        searchController.searchBar.placeholder = "Search for a Pokemon"
         navigationItem.searchController = searchController
-        //searchController.obscuresBackgroundDuringPresentation = true
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
@@ -100,28 +100,16 @@ extension PokedexVC: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
         
+        isSearching = true
         filteredPokemon = pokemon.filter { $0.name.lowercased().contains(filter.lowercased())}
         self.tableView.reloadData()
     }
     
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            isSearching = false
             filteredPokemon = pokemon
             self.tableView.reloadData()
         }
-    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        filteredPokemon = []
-//
-//        if searchText == "" {
-//            filteredPokemon = pokemon
-//        }
-//        for name in pokemon {
-//            if name.name.lowercased().contains(searchText.lowercased())
-//            {
-//                filteredPokemon.append(name)
-//            }
-//        }
-//        self.tableView.reloadData()
-//    }
+
 
 }
