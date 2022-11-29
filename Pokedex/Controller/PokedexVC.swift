@@ -11,16 +11,15 @@ class PokedexVC: UIViewController {
 
     var tableView = UITableView()
     var pokemon: [PokemonEntry] = []
-    
+    var filteredPokemon: [PokemonEntry] = []
     var trainerName: String
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getPokemon()
-        //getSprites()
         configureViewController()
+        configureSearchController()
         configureTableView()
-        
     }
     
     init(trainerName: String) {
@@ -37,6 +36,16 @@ class PokedexVC: UIViewController {
         title = "\(trainerName)'s Pokedex"
         navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    func configureSearchController() {
+        let searchController = UISearchController()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Search for a username"
+        navigationItem.searchController = searchController
+        //searchController.obscuresBackgroundDuringPresentation = true
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     func configureTableView() {
@@ -56,34 +65,63 @@ class PokedexVC: UIViewController {
             switch result {
             case .success(let pokemon):
                 self.pokemon = pokemon
+                self.filteredPokemon = pokemon
             case .failure(let error):
                 print(error.rawValue)
             }
         }
     }
 
+
 }
 
 extension PokedexVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        pokemon.count
+        return filteredPokemon.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PokemonCell.reuseID) as! PokemonCell
-        let pokemon = pokemon[indexPath.row]
+        let pokemon = filteredPokemon[indexPath.row]
         cell.set(pokemon: pokemon)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let destination = PokemonInfoVC()
         let name = pokemon[indexPath.row].name
-        destination.name = name
-        let url = pokemon[indexPath.row].url
-        destination.url = url
-        present(destination, animated: true)
+        let destination = PokemonInfoVC(name: name)
+        let navController = UINavigationController(rootViewController: destination)
+        present(navController, animated: true)
+    }
+}
+
+extension PokedexVC: UISearchResultsUpdating, UISearchBarDelegate {
+
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
+        
+        filteredPokemon = pokemon.filter { $0.name.lowercased().contains(filter.lowercased())}
+        self.tableView.reloadData()
     }
     
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            filteredPokemon = pokemon
+            self.tableView.reloadData()
+        }
     
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        filteredPokemon = []
+//
+//        if searchText == "" {
+//            filteredPokemon = pokemon
+//        }
+//        for name in pokemon {
+//            if name.name.lowercased().contains(searchText.lowercased())
+//            {
+//                filteredPokemon.append(name)
+//            }
+//        }
+//        self.tableView.reloadData()
+//    }
+
 }

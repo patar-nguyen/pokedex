@@ -1,13 +1,13 @@
 //
-//  Label.swift
+//  BodyLabel.swift
 //  Pokedex
 //
-//  Created by Patrick Nguyen on 2022-11-21.
+//  Created by Patrick Nguyen on 2022-11-29.
 //
 
 import UIKit
 
-class Label: UILabel {
+class BodyLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,18 +18,19 @@ class Label: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(textAlignment: NSTextAlignment, fontSize: CGFloat) {
+    convenience init(textAlighment: NSTextAlignment) {
         self.init(frame: .zero)
-        self.textAlignment = textAlignment
-        self.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
+        self.textAlignment = textAlighment
     }
-    
     
     private func configure() {
-        textColor = .label
+        textColor = .secondaryLabel
+        font = UIFont.preferredFont(forTextStyle: .body)
+        adjustsFontForContentSizeCategory = true
         adjustsFontSizeToFitWidth = true
-        minimumScaleFactor = 0.9
-        lineBreakMode = .byTruncatingTail
+        minimumScaleFactor = 0.75
+        lineBreakMode = .byWordWrapping
         translatesAutoresizingMaskIntoConstraints = false
     }
+
 }

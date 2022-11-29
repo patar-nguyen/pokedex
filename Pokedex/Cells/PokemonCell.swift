@@ -25,7 +25,7 @@ class PokemonCell: UITableViewCell {
     
     func set(pokemon: PokemonEntry) {
         avatarImage.setSprite(from: pokemon.url)
-        nameLabel.text = pokemon.name
+        nameLabel.text = pokemon.name.capitalized
     }
     
     private func configure() {
