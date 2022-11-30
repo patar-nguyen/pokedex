@@ -42,7 +42,7 @@ class PokedexVC: UIViewController {
     func configureSearchController() {
         let searchController = UISearchController()
         searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
+        //searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search for a Pokemon"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -71,8 +71,6 @@ class PokedexVC: UIViewController {
             }
         }
     }
-
-
 }
 
 extension PokedexVC: UITableViewDataSource, UITableViewDelegate {
@@ -88,28 +86,35 @@ extension PokedexVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let name = pokemon[indexPath.row].name
+        let name = filteredPokemon[indexPath.row].name
         let destination = PokemonInfoVC(name: name)
         let navController = UINavigationController(rootViewController: destination)
         present(navController, animated: true)
     }
 }
 
-extension PokedexVC: UISearchResultsUpdating, UISearchBarDelegate {
+extension PokedexVC: UISearchResultsUpdating/*, UISearchBarDelegate*/ {
 
     func updateSearchResults(for searchController: UISearchController) {
-        guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
+        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
+            filteredPokemon.removeAll()
+            filteredPokemon = pokemon
+            self.tableView.reloadData()
+            isSearching = false
+            return
+            
+        }
         
         isSearching = true
         filteredPokemon = pokemon.filter { $0.name.lowercased().contains(filter.lowercased())}
         self.tableView.reloadData()
     }
     
-        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-            isSearching = false
-            filteredPokemon = pokemon
-            self.tableView.reloadData()
-        }
+//        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//            isSearching = false
+//            filteredPokemon = pokemon
+//            self.tableView.reloadData()
+//        }
 
 
 }
